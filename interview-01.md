@@ -43,22 +43,54 @@ df.printschema()
 
 #### Q-4 Filter employees whose salary is greater than 100000 and department is either IT or Finance.
 ```bash
+from pyspark.sql import funcations as f
 
+spark = spark.session.builder.appName("filterData").getOrderCreate()
+result_df = df.fillter(f.col('salary') > 100000 & f.col('dept').isin('IT' , 'Finanace'))
+result_df.show();
 ```
 
 #### Q-5 Rename three DataFrame columns without using withColumnRenamed repeatedly.
 ```bash
+toDF() :-
 
+Use toDF() when you want to rename multiple/all columns in one operation.
+original column : 
+emp_name , emp_id, emp_salary
+
+
+rename_df = df.toDf(
+    "employee_name",
+    "employee_id",
+    "employee_salary"
+);
+
+Select :-
+If the DataFrame has other columns that should remain unchanged:
+
+from pyspark.sql import fucntion as f
+df = df.select(
+    f.col('emp_name').alias('employee_name'),
+    f.col('emp_id').alias('employee_id'),
+    f.col(emp_salary)
+);
 ```
 
 #### Q-6 Add a derived column total_amount = quantity * unit_price.
 ```bash
-
+from pyspark.sql import function as f 
+result_df = df.withColumn('total', f.col('quantity') * f.col('unit_price'))
+result_df.show();
 ```
 
 #### Q-7 Convert a string date column from yyyy-MM-dd into a Spark DateType column.
 ```bash
+from pyspark.sql import function as f 
 
+result_df = df.withcolumn(
+    order_date = f.todate(f.col('order_date'), 'yyyy-MM-dd')
+)
+result_df.show();
 ```
 
 #### Q-8 Find the number of distinct customers in an orders DataFrame.
