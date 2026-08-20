@@ -117,6 +117,7 @@ result_df.show();
 ```bash
 
 ```
+
 #### Q-13 Return the top 10 products by total revenue.
 ```bash
 
