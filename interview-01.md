@@ -95,7 +95,13 @@ result_df.show();
 
 #### Q-8 Find the number of distinct customers in an orders DataFrame.
 ```bash
+from pyspark.sql import functions as F
 
+result = df.select(
+    F.countDistinct("customer_id").alias("distinct_customers")
+)
+
+result.show()
 ```
 
 #### Q-9 Find duplicate order_id records and return only the duplicate rows.
