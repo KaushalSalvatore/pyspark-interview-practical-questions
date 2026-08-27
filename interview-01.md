@@ -104,7 +104,25 @@ result.show()
 
 #### Q-9 Find duplicate order_id records and return only the duplicate rows.
 ```bash
+from pyspark.sql import functions as f 
+result = (df.group_by("order_id").count().filter(F.col("count")>1).select("order_id"))
+duplicate_row = df.join(
+    result,
+    on="order_id",
+    how="inner" 
+)
+duplicate_row.show()
 
+-------------------------------------------------------------------------------------------
+
+window_func = Window.partitonBy("order_id")
+
+duplicate_row =(
+    df.withColumn("order_count", F.count("*").over(window_func))
+    .filter(F.col("order_count")>1)
+    .drop("order_count"))
+
+duplicate_row.show()
 ```
 
 #### Q-10 Remove duplicate records while keeping the latest record based on updated_at.
