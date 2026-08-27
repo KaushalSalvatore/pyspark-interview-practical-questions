@@ -113,7 +113,7 @@ duplicate_row = df.join(
 )
 duplicate_row.show()
 
--------------------------------------------------------------------------------------------
+---------------------------
 
 window_func = Window.partitonBy("order_id")
 
@@ -127,12 +127,31 @@ duplicate_row.show()
 
 #### Q-10 Remove duplicate records while keeping the latest record based on updated_at.
 ```bash
+from pyspark.sql import functions as f 
+from pyspark.sql.windows import windows
 
+window_fun = Windows.partitionby("order_id")\
+order_by(F.col('updated_at').desc())
+
+result = (df.withColumn("rn",F.ROW_NUMBER().OVER('window_fun')).
+filter("rn") == 1).
+drop(rn)
+
+result.show()
 ```
 
 #### Q-11 Handle null customer names by replacing them with 'UNKNOWN'.
 ```bash
+from pyspakr.sql import functions as f
 
+result = 
+    (df.withColumn
+    ("customer_name" , 
+    F.when( F.col("customer_name").isnull , "UNKNOWN").
+    otherwise(f.col("cusotmer_name")
+    )
+    ))
+result.show()
 ```
 
 #### Q-12 Calculate total sales, average sales, minimum sales, and maximum sales by store.
