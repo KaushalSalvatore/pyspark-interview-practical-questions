@@ -156,7 +156,19 @@ result.show()
 
 #### Q-12 Calculate total sales, average sales, minimum sales, and maximum sales by store.
 ```bash
+from pyspark.sql import functions as F
 
+result = (
+    df.groupBy("store")
+      .agg(
+          F.sum("sales").alias("total_sales"),
+          F.avg("sales").alias("average_sales"),
+          F.min("sales").alias("minimum_sales"),
+          F.max("sales").alias("maximum_sales")
+      )
+)
+
+result.show()
 ```
 
 #### Q-13 Return the top 10 products by total revenue.
