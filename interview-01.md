@@ -173,15 +173,35 @@ result.show()
 
 #### Q-13 Return the top 10 products by total revenue.
 ```bash
+from pyspark.sql import function as F
 
+result  = df.groupby("products").
+agg(F.col("revenue").alias("total_revenue")).
+orderby(F.col("total_revenue").desc()).
+limit(10)
+
+result.show()
 ```
 
 #### Q-14 Find all customers who have never placed an order.
 ```bash
+from pyspakr.sql import function as F
 
+result = (customer_df.join(
+    order_df ,
+    customer_df.customer_id = order_df.customer_id,
+    "left anti" 
+)
+)
+
+reslt.show()
 ```
 
 #### Q-15 Union two monthly DataFrames when the column order is different.
 ```bash
+from pyspark.sql import functions as F
 
+result = df1.unionByName(df2)
+
+result.show()
 ```
