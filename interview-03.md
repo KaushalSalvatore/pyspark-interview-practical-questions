@@ -59,85 +59,52 @@ val salary_df = empDf.withColumn(
 ).show()
 ``` 
 
-
-#### Q-4
-
-- 
-
+#### Q-4 Find customers whose current order amount is greater than their previous order amount.
 ```bash
 ```
 
-#### Q-5
-
-- 
-
+#### Q-5 Calculate each employee's salary as a percentage of their department's total salary
 ```bash
 ```
 
-#### Q-6 
-
-- 
-
+#### Q-6 Find the highest salary and employee count by department without groupBy
 ```bash
 ```
 
-#### Q-7 
-
-- 
-
+#### Q-7 Assign dense_rank to products based on revenue within each category.
 ```bash
 ```
 
-#### Q-8
-
-- 
-
+#### Q-8 Find the third-highest salary in each department using dense_rank().
 ```bash
 ```
 
-#### Q-9
-
-- 
-
+#### Q-9 Find employees whose salary is above their department average using a window average.
 ```bash
 ```
 
-#### Q-10
-- 
-
+#### Q-10 Find the first non-null status for each customer using first/last window functions.
 ```bash
 ```
 
-
-#### Q-11
-- 
-
+#### Q-11 Identify consecutive status changes for each account using lag()
 ```bash
 ```
 
-
-#### Q-12
-- 
-
+#### Q-12 Calculate month-over-month revenue growth for each product
 ```bash
 ```
 
-
-#### Q-13
-- 
-
+#### Q-13 Find the longest gap between two orders for every customer using lag and datediff.
 ```bash
 ```
 
-#### Q-14
-- 
+### Joins & Broadcast Join
 
+#### Q-14 Join customers and orders and return customers with their total order amount.
 ```bash
 ```
 
-
-#### Q-15
-- 
-
+#### Q-15 Perform an inner join between orders and products using product_id.
 ```bash
 ```
