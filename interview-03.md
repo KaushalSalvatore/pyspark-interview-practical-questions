@@ -61,14 +61,30 @@ val salary_df = empDf.withColumn(
 
 #### Q-4 Find customers whose current order amount is greater than their previous order amount.
 ```bash
+from pyspark.sql import functions as f
+from pysaprk.sql.windows import windows 
+
+window_fun = windows.partitionBY("customer_id").orderby("amount")
+result_df = df.withColumn("pre_amount", F.lag("amount").over("window_fun")).filter(F.col(salary) > F.col("pre_salary"))
+result_df.show()
 ```
 
-#### Q-5 Calculate each employee's salary as a percentage of their department's total salary
+#### Q-5 Calculate each employee's salary as a percentage of their department's total salary ? 
 ```bash
+from pyspark.sql import functions as f
+from pysaprk.sql.windows import windows 
+
+window_fun = windows.partitionBY("employee_id").orderby("salary")
+
+result_df = df.withColumn("dept_total_salary", sum("salary").over(window_fun))
+                .withColumn("salary_pre",(F.col("salary") / F.col("department_total_salary")) * 100)
+
+result_df.show()
 ```
 
-#### Q-6 Find the highest salary and employee count by department without groupBy
+#### Q-6 Find the highest salary and employee count by department without groupBy ?
 ```bash
+
 ```
 
 #### Q-7 Assign dense_rank to products based on revenue within each category.
