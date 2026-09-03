@@ -76,7 +76,7 @@ from pysaprk.sql.windows import windows
 
 window_fun = windows.partitionBY("employee_id").orderby("salary")
 
-result_df = df.withColumn("dept_total_salary", sum("salary").over(window_fun))
+result_df = df.withColumn("dept_total_salary", sum("salary").over("window_fun"))
                 .withColumn("salary_pre",(F.col("salary") / F.col("department_total_salary")) * 100)
 
 result_df.show()
@@ -84,15 +84,27 @@ result_df.show()
 
 #### Q-6 Find the highest salary and employee count by department without groupBy ?
 ```bash
+from pyspark.sql import functions as F
+from pysaprk.sql.windows import windows 
 
+window_fun = windows.partitionBY("employee_name").orderby("salary")
+result = df.withColumn("high_salary", F.Max("salary").over("window_fun")).
+        df.withColumn("emp_count"), F.Count("emp_id").over("window_fun"))
+result.show();
 ```
 
 #### Q-7 Assign dense_rank to products based on revenue within each category.
 ```bash
+from pyspark.sql import funcation as f 
+from pyspark.sql.windows import windows
+window_fun = windows.partitionBY("category").orderby(f.col("revenue"))
+result = df.withColumn("cat_revenue_rank", F.dense_rank().over("window_fun"))
+result.show();
 ```
 
-#### Q-8 Find the third-highest salary in each department using dense_rank().
+#### Q-8 Find the third-highest salary in each department using dense_rank() ?
 ```bash
+
 ```
 
 #### Q-9 Find employees whose salary is above their department average using a window average.
