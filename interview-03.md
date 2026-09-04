@@ -65,7 +65,7 @@ from pyspark.sql import functions as f
 from pysaprk.sql.windows import windows 
 
 window_fun = windows.partitionBY("customer_id").orderby("amount")
-result_df = df.withColumn("pre_amount", F.lag("amount").over("window_fun")).filter(F.col(salary) > F.col("pre_salary"))
+result_df = df.withColumn("pre_amount", F.lag("amount").over("window_fun")).filter(F.col("salary") > F.col("pre_salary"))
 result_df.show()
 ```
 
@@ -104,23 +104,54 @@ result.show();
 
 #### Q-8 Find the third-highest salary in each department using dense_rank() ?
 ```bash
-
+from pyspark.sql import functions as F
+from pyspark.sql.window import windows 
+window_fun = windoews.partitionby("dept").orderby(F.col("salary").desc())
+result = f.withColumn("rn", dense_rank().over("window_fun")).filter(f.col("rn") ==3))
+result.show()
 ```
 
 #### Q-9 Find employees whose salary is above their department average using a window average.
 ```bash
+from pyspark.sql import functions as f
+from pysaprk.sql.windows import windows 
+
+window_fun = windows.partitionBY("dept").orderby("salary")
+result_df = df.withColumn("dept_avg_salary" F.AVG("salary").over("window_fun").
+filter(f.col("salary")>F.col("dept_avg_salary")))
+result_df.show()
 ```
 
 #### Q-10 Find the first non-null status for each customer using first/last window functions.
 ```bash
+window_fun = windows.partitionBY("customer_id").orderby("order_date")
+result = df.withColumn(
+        "first_status",
+        F.first("status", ignorenulls=True).over(window_spec)
+    )
+result.show()
 ```
 
 #### Q-11 Identify consecutive status changes for each account using lag()
 ```bash
+from pyspark.sql import functions as F
+from pyspark.sql.window import Window
+
+window_fun = windows.partitionby(account_id).orderby(status_date)
+
+result = df.withColumn("pre_status",F.lag("status").over("window_fun")).
+withColumn("status_change", F.when(F.col("status") != F.col(pre_status), "changed status").otherwise("no change"))
 ```
 
-#### Q-12 Calculate month-over-month revenue growth for each product
+#### Q-12 Calculate month-over-month revenue growth for each product.
 ```bash
+from pyspark.sql import functions as F
+from pyspark.sql.window import Window
+monthly_revenue = df.groupby("year" , "month" , "productId").agg(
+    F.sum("revenue").alise("monthly_revenue"))
+withdow_fun = window.partitionby(productId).orderby("year", "month")
+result = df.withCoulmn("montly_product_revenue", lag("monthly_revenue").over(withdow_fun))
+result.show()
 ```
 
 #### Q-13 Find the longest gap between two orders for every customer using lag and datediff.
