@@ -149,21 +149,41 @@ from pyspark.sql import functions as F
 from pyspark.sql.window import Window
 monthly_revenue = df.groupby("year" , "month" , "productId").agg(
     F.sum("revenue").alise("monthly_revenue"))
-withdow_fun = window.partitionby(productId).orderby("year", "month")
-result = df.withCoulmn("montly_product_revenue", lag("monthly_revenue").over(withdow_fun))
+withdow_fun = window.partitionby("productId").orderby("year", "month")
+result = df.withCoulmn("montly_product_revenue", lag("monthly_revenue").over("withdow_fun"))
 result.show()
 ```
 
 #### Q-13 Find the longest gap between two orders for every customer using lag and datediff.
 ```bash
+from pyspark.sql import funcations as F
+from pyspark.sql.wimdow import windows 
+
+window_func = windows.partitionby("customerID").orderby("order_date").desc()
+result_df = df.withColumn("previous_order_date",LAG("date").over("window_func")).
+        withColumn("date_diff" ,F.datediff(f.col("order_date")-f.col("previous_order_date")))
+result_df = result_df.groupby("cusotmer_id").agg(F.max("gap_days").alias("longest_gap_days"))
+result._df.show()
 ```
 
 ### Joins & Broadcast Join
 
 #### Q-14 Join customers and orders and return customers with their total order amount.
 ```bash
+from pyspark.sql import functions as F
+
+resultDf = customers.join(orders , on= "order_id", how="inner").filter(f.col("status") == "return")
+resultDf.show()
+
+-- Another safer way 
+
+result_df = (customers.alias("c").join(orders.alias("o"),F.col("c.order_id") == F.col("o.order_id"),"inner")
+    .filter(F.col("o.status") == "return")
+    .select("c.*", "o.order_id", "o.status"))
+result_df.show()
 ```
 
 #### Q-15 Perform an inner join between orders and products using product_id.
 ```bash
+result = orders.join("prodicts",on="prodcutID",how="inner"); 
 ```
