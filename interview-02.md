@@ -104,10 +104,29 @@ result.show()
 
 #### Q-11 Calculate a cumulative monthly sales total for each store.
 ```bash
+form pyspark.sql import functions as f
+from pyspark.sql.window import windows 
+
+month_sale = (df.withColumn("month", F.col("sales_date")
+                .withColumn("year", F.year("order_date"))
+                .groupBy("store_id", "year", "month")
+                .agg(
+                F.sum("sales").alias("monthly_sales")
+    )
+    )
+windows_fun = windows.partitionby("storeID").orderby("year","month").rowBetween(window.unboundedPreceding , window.CurrentRow)
+result_df = df.withColumn("Monthly_sales",f.sum("month_sale"))over(window_fun)
+result_df.show();
 ```
 
 #### Q-12 Calculate a 3-day moving average of sales using rowsBetween.
 ```bash
+from pyspark.sql import funcations as f 
+from pysaprk.sql.window import windows
+
+window_fun = windows.partitionby("storeId").orderBY("order_date").rowBetween(-2, window.currentRow)
+result_df = df.withColumn("avg_sales", AVG(F.col("sales").Over(window_fun)))
+resutl_df.show()
 ```
 
 #### Q-13 Calculate the previous order amount for each customer using lag().
