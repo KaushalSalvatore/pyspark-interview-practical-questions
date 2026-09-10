@@ -160,7 +160,7 @@ from pyspark.sql import funcations as F
 from pyspark.sql.wimdow import windows 
 
 window_func = windows.partitionby("customerID").orderby("order_date").desc()
-result_df = df.withColumn("previous_order_date",LAG("date").over("window_func")).
+result_df = df.withColumn("previous_order_date",F.LAG("date").over("window_func")).
         withColumn("date_diff" ,F.datediff(f.col("order_date")-f.col("previous_order_date")))
 result_df = result_df.groupby("cusotmer_id").agg(F.max("gap_days").alias("longest_gap_days"))
 result._df.show()

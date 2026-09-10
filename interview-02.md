@@ -131,12 +131,29 @@ resutl_df.show()
 
 #### Q-13 Calculate the previous order amount for each customer using lag().
 ```bash
+from pyspark.sql import  as F
+import pyspark.sql.window import window
+window_fun = window.partitionBy("customer_id").orderby("order_id").desc()
+result_df = df.withColumn("pre_order", F.lag(order_amount).over(window_fun)))
+result._df.show()
 ```
 
 #### Q-14 Calculate the next order amount for each customer using lead().
 ```bash
+from pyspark.sql import funcation as F
+import pyspark.sql.window import window
+window_fun = window.partitionBy("customer_id").orderby("order_id").desc()
+result_df = df.withColumn("pre_order", F.LEAD(order_amount).over(window_fun)))
+result._df.show()
 ```
 
 #### Q-15 Find the number of days between consecutive orders for each customer.
 ```bash
+from pyspark.sql import funcation as f 
+from pyspark.sql.windows import window
+
+window_fun = window.partitionBy("CustomerID").orderBY("order_date").desc()
+resultDF = df.withColumn("previous_order_date",F.LAG("order_date").Over(window_fun)).
+            withColumn("order_gap_days", F.dateDIFF(F.col("order_date")-F.col("previous_order_date")))
+resultDf.show()
 ```
