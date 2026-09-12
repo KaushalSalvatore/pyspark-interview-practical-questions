@@ -199,7 +199,7 @@ reslt.show()
 
 #### Q-15 Union two monthly DataFrames when the column order is different.
 ```bash
-from pyspark.sql import functions as F
+from pyspark.sql import functions as F                                                          
 result = df1.unionByName(df2)
 result.show()
 ```
