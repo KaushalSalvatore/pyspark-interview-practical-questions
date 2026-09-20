@@ -166,24 +166,35 @@ result_df = result_df.groupby("cusotmer_id").agg(F.max("gap_days").alias("longes
 result._df.show()
 ```
 
-### Joins & Broadcast Join
+#### Q-14  Write a Python function to filter out customers who have made more than 5 purchases in the last 6 months ? 
+```bash
+from pyspark.sql import function as f 
 
-#### Q-14 Join customers and orders and return customers with their total order amount.
+result_df = df.filter(f.col("purches_date") >= f.add.months(f.current_month() - 6)).
+            Groupby("customer_id").
+            agg(F.count("*").alias("purchase_count")).
+            orderBy(F.col("purchase_count").desc());
+result_df.show();
+```
+
+#### Q-15 Develop a program to read a CSV file, extract unique values from a column, and save the results in a new file ?
 ```bash
 from pyspark.sql import functions as F
 
-resultDf = customers.join(orders , on= "order_id", how="inner").filter(f.col("status") == "return")
-resultDf.show()
+# Read CSV
+df = (
+    spark.read
+    .option("header", "true")
+    .option("inferSchema", "true")
+    .csv("/input/customers.csv")
+)
 
--- Another safer way 
+df1 = df.select("id").distinct()
 
-result_df = (customers.alias("c").join(orders.alias("o"),F.col("c.order_id") == F.col("o.order_id"),"inner")
-    .filter(F.col("o.status") == "return")
-    .select("c.*", "o.order_id", "o.status"))
-result_df.show()
-```
+df1.show()
 
-#### Q-15 Perform an inner join between orders and products using product_id.
-```bash
-result = orders.join("prodicts",on="prodcutID",how="inner"); 
+df1.write \
+    .mode("overwrite") \
+    .option("header", "true") \
+    .csv("/output/unique_ids")
 ```
