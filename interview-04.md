@@ -98,12 +98,3 @@ result_df = (
 ```bash
 ```
 
-### Partitioning, Repartition & Coalesce
-
-#### Q-14
-```bash
-```
-
-#### Q-15
-```bash
-```

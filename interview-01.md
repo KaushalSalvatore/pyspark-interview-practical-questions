@@ -203,3 +203,52 @@ from pyspark.sql import functions as F
 result = df1.unionByName(df2)
 result.show()
 ```
+
+#### Q-16 Given a nested JSON file, how would you parse and flatten it in PySpark ?
+```bash
+{
+  "customer_id": 101,
+  "name": "John",
+  "address": {
+    "city": "New York",
+    "state": "NY"
+  },
+  "policies": [
+    {
+      "policy_id": "P101",
+      "type": "Auto",
+      "premium": 500
+    },
+    {
+      "policy_id": "P102",
+      "type": "Home",
+      "premium": 800
+    }
+  ]
+}
+
+from pyspark.sql.functions import col
+
+df1 = df.select(
+    "customer_id",
+    "name",
+    col("address.city").alias("city"),
+    col("address.state").alias("state"),
+    "policies"
+)
+
+df2 = df1.withColumn(
+    "policy",
+    explode("policies")
+)
+
+df_final = df2.select(
+    "customer_id",
+    "name",
+    "city",
+    "state",
+    col("policy.policy_id").alias("policy_id"),
+    col("policy.type").alias("policy_type"),
+    col("policy.premium").alias("premium")
+)
+```
